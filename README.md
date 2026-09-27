@@ -44,6 +44,12 @@ The application must be started from the project root so that it can find
 
 You can also run the `Tanks.App` main class from an IDE.
 
+For the Windows ZIP release, open a terminal in the extracted folder and run:
+
+```bash
+java -jar Tanks-1.0.jar
+```
+
 ## Controls
 
 | Key | Action |

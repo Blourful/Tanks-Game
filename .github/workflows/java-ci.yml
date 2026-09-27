@@ -48,7 +48,7 @@ jobs:
         run: |
           mkdir -p package/Tanks-Game/src/main/resources
           cp build/libs/*.jar package/Tanks-Game/Tanks-1.0.jar
-          cp config.json level1.txt level2.txt level3.txt level4.txt run.bat package/Tanks-Game/
+          cp config.json level1.txt level2.txt level3.txt level4.txt package/Tanks-Game/
           cp -r src/main/resources/Tanks package/Tanks-Game/src/main/resources/
           cd package
           zip -r "Tanks-Game-${GITHUB_REF_NAME}-windows.zip" Tanks-Game
