@@ -1,0 +1,21 @@
+# Gradle
+.gradle/
+build/
+
+# Compiled Java files
+bin/
+*.class
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+*.log
+report.txt
+
+# OS
+.DS_Store
+Thumbs.db
