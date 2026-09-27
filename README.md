@@ -62,6 +62,89 @@ java -jar Tanks-1.0.jar
 | `R` | Spend score to restore health; restart after game over |
 | `F` | Spend score to refuel |
 
+## Game Mechanics
+
+### Tank Attributes
+
+- Every tank starts with 100 health, 250 fuel, and 50 firing power.
+- Firing power is limited by the tank's current health. When a tank is damaged,
+	its maximum available firing power is reduced accordingly.
+- The firing angle is limited to 0 to 180 degrees.
+- Holding `Left Arrow` or `Right Arrow` moves the tank by 2 pixels per frame
+	and consumes 2 fuel per frame. Movement stops when the tank reaches the edge
+	of the screen or has no fuel remaining.
+- Tanks cannot be controlled while they are dropping.
+
+### Turns and Firing
+
+- Only the current tank can move, aim, adjust power, or fire.
+- Pressing `Space` creates a projectile and immediately advances the turn to the
+	next remaining tank.
+- After each shot, the wind changes by a random amount between -5 and +5.
+- The projectile's initial speed is calculated from firing power as:
+
+	```text
+	speed = firingPower / 100 * 16 + 2
+	```
+
+- Projectile motion uses gravity of 0.24 pixels per frame squared.
+- Wind changes horizontal velocity by `wind * 0.03` each frame. Aiming and
+	power selection are therefore both important for long-distance shots.
+
+### Explosions and Damage
+
+- A projectile explodes when it reaches the terrain surface.
+- Each projectile destroys terrain within a 30-pixel radius.
+- Tanks inside the same 30-pixel explosion radius take distance-based damage:
+	- 60 damage at the explosion centre;
+	- damage decreases linearly with distance;
+	- damage reaches 0 at the edge of the radius.
+- The damage is applied to every tank in the radius, including the firing tank
+	if it is caught by its own explosion.
+- A tank with health reduced to 0 is immediately eligible for elimination.
+- A tank can also be knocked into a drop when an explosion occurs horizontally
+	within 30 pixels of it, even if the tank is not directly damaged by the
+	explosion.
+
+### Parachutes and Falling
+
+- Each tank starts with 3 parachutes. Remaining parachutes carry over between
+	levels.
+- When an explosion knocks a tank from the terrain, the tank enters a dropping
+	state and can no longer be controlled.
+- A tank with a parachute descends at 2 pixels per frame and does not lose health
+	from the fall.
+- A tank without a parachute descends at 4 pixels per frame and loses 4 health
+	per frame while dropping.
+- One parachute is consumed when a dropping tank is eliminated, either by
+	reaching the bottom of the screen or by losing all health during the drop.
+- Dropping tanks can still be affected by the game's elimination and explosion
+	rules.
+
+### Elimination and Level Progression
+
+- A tank is eliminated when its health is 0 or below, or when its vertical
+	position passes the bottom of the screen at 640 pixels.
+- An eliminated tank is removed from the active turn order.
+- A tank eliminated by health loss creates a smaller 15-pixel explosion.
+- A tank that falls off the screen creates a larger 30-pixel explosion.
+- The explosion caused by an eliminated tank can damage other tanks and modify
+	the terrain.
+- A level ends when only one tank remains. The game then loads the next level.
+- The final game ends after the last configured level, where the final scores
+	are displayed.
+
+### Scoring and Recovery
+
+- Damage dealt to another tank is added to the attacker's score.
+- Damage to the firing tank does not award score.
+- Causing a tank to drop without a parachute awards score while the tank loses
+	health; knocking it completely off the screen awards the remaining health as
+	score.
+- Pressing `R` spends 20 score to restore 20 health, up to the 100-health
+	maximum. On the final game-over screen, `R` restarts the game instead.
+- Pressing `F` spends 10 score to restore 200 fuel.
+
 ## Testing
 
 Run the unit tests:
